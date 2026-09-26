@@ -27,22 +27,31 @@ The operation must **never exceed ₹10,000 at any point**.
 
 ---
 
-# 🧠 Think Like
+## Required Answer Format and Assumptions
 
-Combine the mindset of:
+Return concise Markdown using these sections in order:
 
-- 🧠 Business Strategist
-- 📊 Data Analyst
-- 🍔 Food Entrepreneur
-- ⚡ Demand Predictor
-- 🎯 Gen-Z Marketer
-- ♻️ Inventory Manager
+1. **Assumptions and decision summary:** State unknowns, label estimates, explain the budget interpretation, and give the strategy in 3–5 bullets.
+2. **Menu and unit economics:** Table with item, category, unit food cost, selling price, contribution per serving, day-one demand, and maximum stock.
+3. **Seven-day operating plan:** One row per day with theme, items and planned quantities, expected buyers, estimated revenue, planned food spend, cumulative spend, remaining budget, and learning/marketing action. Item quantities and costs must reconcile to spend.
+4. **Demand update example:** Show one item's sales, sell-through, factor, rounded stock recommendation, and any cap applied.
+5. **Daily close and dashboard:** Give a reusable record for units sold, revenue, food cost, gross profit, waste, top/weak item, peak hour, average order value, repeat customers (if measurable), feedback, and next-day stock.
+6. **Seven-day financial summary:** Recalculate projected buyers, revenue, food cost, gross profit, purchases, and remaining budget from the plan. List excluded operating costs.
+7. **Risks and next actions:** Identify facts to verify before purchasing or serving.
 
-**Do not simply create a menu.**
+Use the given figures as illustrative planning assumptions, not verified local facts. Do not invent supplier quotes, actual sales, survey results, or local legal requirements. If information is missing, state a conservative assumption and show how new data would change the plan. Flag allergens and food-safety or licensing requirements for local verification.
 
-## BUILD A SYSTEM THAT LEARNS.
+---
 
-The canteen should use sales data from previous days to make smarter decisions on future days.
+# Optional Context Slots
+
+Use supplied values when present; otherwise retain the defaults and label assumptions. These inputs can refine estimates but cannot override the ₹10,000 total cap or the seven-day duration.
+
+- Local supplier quotes: `{{LOCAL_SUPPLIER_QUOTES | optional}}`
+- Equipment and staffing available: `{{AVAILABLE_RESOURCES | optional}}`
+- Dietary, allergen, or menu restrictions: `{{FOOD_RESTRICTIONS | optional}}`
+- Actual sales data for prior days: `{{SALES_HISTORY | none on day one}}`
+- Operating dates or hours: `{{OPERATING_SCHEDULE | seven consecutive days}}`
 
 ---
 
@@ -86,10 +95,11 @@ Stock should change according to predicted demand.
 
 The canteen should learn from daily sales.
 
-Use:
+Use the following method for each item after day one:
 
 ```text
-Tomorrow's Stock = Previous Sales × Demand Factor
+Sell-through = Units Sold / Units Stocked
+Recommended Stock = ceiling(Previous Comparable-Day Sales × Demand Factor)
 ```
 
 Example:
@@ -114,21 +124,15 @@ Then:
 
 So Tuesday's recommended stock becomes **29 plates**.
 
-### Smart Rules
+### Stock Rules
 
-If an item sells out:
-
-```text
-Demand ↑
-Stock ↑
-```
-
-If an item sells poorly:
-
-```text
-Demand ↓
-Stock ↓
-```
+- If an item sells out, use a demand factor of **1.20**.
+- Otherwise, sell-through of **80% or more** uses **1.15**.
+- Sell-through of **50% to less than 80%** uses **1.00**.
+- Sell-through **below 50%** uses **0.75**.
+- Round servings up to a whole unit. Cap recommended stock at the item's maximum and at the quantity affordable within the remaining total budget. If the budget cap reduces a recommendation, state the trade-off.
+- If sales data is missing, do not interpret it as zero demand; retain a conservative baseline and label the assumption. For a new item, use a comparable item and identify it.
+- Unsold stock is not automatically waste if it can be safely carried forward. Record actual discarded quantity and cost separately.
 
 The goal is to avoid both:
 
@@ -137,188 +141,19 @@ The goal is to avoid both:
 
 ---
 
-# 📅 3. The 7-Day Experience
-
-Every day should have a unique identity.
-
-## 🔋 Monday — Back-to-Campus Fuel
-
-Start the week with affordable, familiar comfort food.
-
-### Suggested Menu
-
-- 🍜 Masala Maggi
-- 🥪 Veg Sandwich
-- 🥔 Aloo Paratha + Curd
-- 🥤 Lemon Iced Tea
-- 🧃 Nimbu Shikanji
-
-### Hero Combo
-
-**Maggi + Lemon Iced Tea = ₹55**
-
-### Mission
-
-Use Monday to establish the **baseline demand**.
-
-Track:
-
-- Most ordered item
-- Peak ordering time
-- Average spending
-- Unsold quantity
-
----
-
-## 💥 Tuesday — Combo Attack
-
-Turn individual products into attractive value combinations.
-
-### Combos
-
-- 🌯 Frankie + Shikanji = ₹60
-- 🥪 Sandwich + Iced Tea = ₹65
-- 🍜 Maggi + Iced Tea = ₹55
-
-### Strategy
-
-Encourage students to buy combinations instead of heavily discounting individual items.
-
----
-
-## 😋 Wednesday — Midweek Madness
-
-Wednesday is the **experimentation day**.
-
-### Menu
-
-- 🍜 Maggi
-- 🍟 Masala Fries
-- 🥟 Veg Momos
-- 🌶️ Peri-Peri Momos
-- 🥤 Cold Coffee
-
-### 🔥 Limited Drop
-
-## PERI-PERI MOMO DROP
-
-Only **35 plates**.
-
-Marketing message:
-
-> 🚨 ONLY 35 PLATES TODAY 🚨
-
-Use scarcity to create excitement while controlling inventory.
-
----
-
-## ❤️ Thursday — Student Favourite Takeover
-
-By Thursday, the canteen has collected three days of data.
-
-Identify the best-performing products.
-
-For example:
-
-- 🥟 Momos
-- 🍜 Maggi
-- 🥤 Cold Coffee
-
-Turn them into the day's hero products.
-
-### Student Voting
-
-Create a QR code:
-
-> **"What should stay on the menu?"**
-
-Use student votes and sales data together.
-
----
-
-## 🎉 Friday — Chill & Feast
-
-Friday gets the highest entertainment factor.
-
-### Menu
-
-- 🍚 Fried Rice
-- 🥟 Momos
-- 🌶️ Peri-Peri Momos
-- 🍟 Fries
-- 🥤 Cold Coffee
-
-### 🎡 Spin the Wheel
-
-For every ₹100 spent:
-
-**1 spin**
-
-Possible rewards:
-
-- Free Shikanji
-- ₹10 off
-- Extra sauce
-- Free fries
-- Better luck next time 😭
-
-### Important
-
-Most rewards should be **low-cost add-ons**, protecting profit margins.
-
----
-
-## 🌶️ Saturday — Desi Twist
-
-Give Saturday a completely different personality.
-
-### Menu
-
-- 🥔 Aloo Paratha + Curd
-- 🌯 Aloo Frankie
-- 🍚 Fried Rice
-- 🥤 Shikanji
-- 🥤 Iced Tea
-
-### Desi Combo
-
-**Aloo Frankie + Shikanji = ₹60**
-
-### Inventory Strategy
-
-Use overlapping ingredients across products.
-
-This reduces:
-
-- Inventory complexity
-- Ingredient waste
-- Purchasing costs
-
----
-
-## 🏆 Sunday — Grand Finale
-
-Sunday should be completely **data-driven**.
-
-Do NOT simply repeat the original menu.
-
-Use the entire week's data.
-
-### Example Final Menu
-
-- 🥟 Momos
-- 🌶️ Peri-Peri Momos
-- 🍜 Maggi
-- 🥤 Cold Coffee
-- 🍚 Fried Rice
-
-### 🏆 Student's Choice
-
-Ask students:
-
-> **"Which item deserves to become our signature canteen item?"**
-
-The winning product becomes the potential **Signature Item**.
+# 📅 3. Seven-Day Experience
+
+Use these identities as guidance, not mandatory full menus. Adjust selections using sales and feedback.
+
+| Day | Identity | Menu and operating action |
+|---|---|---|
+| Monday | Back-to-Campus Fuel | Familiar comfort food; establish baseline demand. Hero combo: Maggi + Lemon Iced Tea, ₹55. |
+| Tuesday | Combo Attack | Test Frankie + Shikanji ₹60, Sandwich + Iced Tea ₹65, or Maggi + Iced Tea ₹55; avoid deep discounts. |
+| Wednesday | Midweek Madness | Test a small menu; optional Peri-Peri Momo drop capped at 35 plates. |
+| Thursday | Student Favourite Takeover | Use three days of sales and student votes to choose hero items; ask “What should stay on the menu?” |
+| Friday | Chill & Feast | Feature popular items. Optional spin per ₹100 spent; cap reward cost and prefer low-cost add-ons. |
+| Saturday | Desi Twist | Feature Aloo Paratha, Aloo Frankie, Fried Rice, Shikanji, or Iced Tea; share ingredients where practical. Frankie + Shikanji combo: ₹60. |
+| Sunday | Grand Finale | Use all seven days of evidence to choose the final menu and a potential signature item; do not simply repeat Monday. |
 
 ---
 
@@ -349,7 +184,9 @@ The budget is ONE shared wallet.
 Total spending ≤ ₹10,000
 ```
 
-Never exceed the total budget.
+Never exceed the total cumulative food-purchase budget. The daily amounts above are planning ceilings, not mandatory spend; unused budget carries forward. For this challenge, count the unit food cost of every portion stocked/prepared as that day's spend, including unsold portions. Do not treat sales revenue as additional purchasing cash.
+
+Report revenue, food cost of sold portions, gross profit, total planned purchase spend, and waste cost separately. Gross profit is revenue minus food cost of portions sold; it is not net profit. Do not count wages, rent, electricity, tax, packaging, or equipment unless values are provided, and list these as exclusions. Reconcile every total to the item quantities in the seven-day plan.
 
 ---
 
@@ -372,303 +209,20 @@ Assume approximately **200 potential students per day**.
 
 **₹10,000**
 
-### Simplified Gross Operating Profit
+### Simplified Cash Surplus After Planned Purchases
 
 ```text
 ₹48,925 - ₹10,000 = ₹38,925
 ```
 
+This is projected revenue minus planned purchases, not gross profit or net profit. Recalculate it if the operating plan changes.
+
 > **Note:** This is a simplified challenge model. Real-world profit would also need to account for staff wages, rent, electricity, equipment, taxes, packaging, spoilage and other operating expenses.
 
 ---
 
-# ♻️ 6. Anti-Waste System
+## Daily Learning and Student Engagement
 
-Every product gets a daily performance classification.
+At close, record orders, sales, costs, gross profit, actual waste, top/weak item, peak hour, average order value, and repeat customers when measurable. Classify each item as **Scale**, **Keep**, or **Pause** using demand, contribution, and waste; the menu may change daily. Collect quick student ratings for taste, price, speed, and likelihood to repurchase, plus one suggestion for tomorrow. Use sales and feedback together.
 
-## 🟢 GREEN — SCALE
-
-If:
-
-```text
-80%+ of stock sold
-```
-
-Then:
-
-```text
-Increase next-day stock by 15–20%
-```
-
----
-
-## 🟡 YELLOW — KEEP
-
-If:
-
-```text
-50–80% of stock sold
-```
-
-Then:
-
-```text
-Keep stock approximately the same.
-```
-
----
-
-## 🔴 RED — REDUCE
-
-If:
-
-```text
-Less than 50% sold
-```
-
-Then:
-
-```text
-Reduce next-day stock by 20–30%.
-```
-
----
-
-# 🧠 7. Daily Learning Engine
-
-At the end of every day, record:
-
-```text
-Orders
-Revenue
-Food Cost
-Gross Profit
-Waste
-Top Item
-Worst Item
-Peak Hour
-Average Order Value
-Repeat Customers
-```
-
-The next day's purchasing decision should use this information.
-
----
-
-# 🔥 8. Kill / Keep / Scale
-
-Every night, every product enters one of three categories.
-
-### 🔥 SCALE
-
-High demand + strong profit
-
-→ Increase stock.
-
-### ❤️ KEEP
-
-Reliable demand + acceptable profit
-
-→ Maintain stock.
-
-### ❌ KILL
-
-Low demand + high wastage
-
-→ Remove or temporarily pause.
-
-Therefore:
-
-> **Monday's menu does NOT have to be Sunday's menu.**
-
-The menu evolves with real student behaviour.
-
----
-
-# 📲 9. Student Feedback Loop
-
-Place a QR code at the counter.
-
-### 3-SECOND FEEDBACK
-
-Students rate:
-
-⭐ Taste  
-💰 Price  
-⚡ Speed  
-❤️ Would buy again?
-
-Then ask:
-
-> **"What should we sell tomorrow?"**
-
-This turns students into active participants in the canteen's product decisions.
-
----
-
-# 🎯 10. Gen-Z Marketing
-
-Don't advertise like a traditional canteen.
-
-Instead of:
-
-> Today's Special: Veg Momos
-
-Use:
-
-### Monday
-
-> **"MONDAY ISN'T READY FOR THIS MAGGI. 🍜"**
-
-### Wednesday
-
-> **"35 PLATES. THAT'S IT. 🌶️"**
-
-### Friday
-
-> **"FRIDAY CALLED. IT WANTS MOMOS. 🥟"**
-
-### Sunday
-
-> **"YOU VOTED. WE COOKED. 🏆"**
-
-The goal:
-
-```text
-Food → Experience → Community → Repeat Customers
-```
-
----
-
-# 📊 11. Canteen Dashboard
-
-The system should display:
-
-### 💰 Finance
-
-- Starting Budget
-- Money Spent
-- Money Remaining
-- Revenue
-- Gross Profit
-
-### 🍔 Products
-
-- Top Seller
-- Lowest Seller
-- Most Profitable Item
-- Most Popular Item
-
-### 📦 Inventory
-
-- Current Stock
-- Sold
-- Remaining
-- Waste
-- Recommended Next-Day Stock
-
-### 👨‍🎓 Students
-
-- Customers Served
-- Average Order Value
-- Repeat Customers
-- Student Satisfaction
-
-### 📈 Performance
-
-- Daily Revenue
-- Daily Profit
-- 7-Day Revenue
-- 7-Day Profit
-- Waste %
-
----
-
-# 🚀 12. The Core Business Loop
-
-```text
-SELL
-  ↓
-COLLECT DATA
-  ↓
-ANALYZE DEMAND
-  ↓
-PREDICT
-  ↓
-ADJUST STOCK
-  ↓
-REDUCE WASTE
-  ↓
-IMPROVE EXPERIENCE
-  ↓
-SELL MORE
-  ↓
-REPEAT
-```
-
----
-
-# 🏆 The Big Idea
-
-The ₹10,000 isn't the real challenge.
-
-The real challenge is:
-
-## ₹10,000 → DATA → SMARTER DECISIONS → LOWER WASTE → HIGHER SALES
-
-The canteen gets smarter every single day.
-
-### Day 1
-
-👀 Observe demand
-
-↓
-
-### Day 2
-
-📊 Adjust inventory
-
-↓
-
-### Day 3
-
-🔥 Test new products
-
-↓
-
-### Day 4
-
-❤️ Double down on favourites
-
-↓
-
-### Day 5
-
-🎉 Increase engagement
-
-↓
-
-### Day 6
-
-🌶️ Optimize inventory
-
-↓
-
-### Day 7
-
-🏆 Use the week's data to build the final menu
-
----
-
-# 💡 Final Concept
-
-> ## **"WE DON'T RUN A CANTEEN FOR STUDENTS.**
-> ## **WE RUN A CANTEEN WITH STUDENTS."**
-
-Every purchase teaches the system something.
-
-Every day's data changes the next day's decisions.
-
-Every student becomes part of the feedback loop.
-
-**That is what turns a ₹10,000 canteen into a next-generation student food business.** 🚀
+Use brief student-facing campaign copy where useful, such as “Monday isn't ready for this Maggi,” “35 plates. That's it,” “Friday called. It wants momos,” or “You voted. We cooked.” Keep promotions within the budget and the output schema.
